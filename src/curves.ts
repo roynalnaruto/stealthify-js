@@ -24,6 +24,20 @@ export abstract class EllipticCurve {
     return this.pointFromScalar(r)
   }
 
+  pointAsHex(p: Point): string {
+    const x = p.getX().toString(16, 64)
+    const y = p.getY().toString(16, 64)
+    return x.concat(y)
+  }
+
+  scalarFromHex(h: string): typeof BN {
+    const groupModulus = new BN(this.curve.n, 16)
+    const groupReduction = BN.red(groupModulus)
+    return new BN(h, 16).toRed(groupReduction)
+  }
+
+  abstract compressToHex(p: Point): string
+
   abstract decompressHex(h: typeof BN): Point
 }
 
